@@ -152,7 +152,7 @@ function CarouselDemo() {
                     <Card className="flex items-center justify-center h-full">
                       <CardContent className="flex flex-col items-center justify-center p-6">
                         <div className="relative w-full h-64">
-                          <img
+                          <Image
                             src={users[currentIndex].photos[photoIndex]}
                             alt={`${users[currentIndex].username}'s photo`}
                             className="w-full h-full object-cover"
