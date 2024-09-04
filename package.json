@@ -1,0 +1,49 @@
+{
+  "name": "devdate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"next dev\" \"node src/server.js\"",
+    "build": "next build",
+    "lint": "next lint",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "class-variance-authority": "^0.7.0",
+    "cloudinary": "^2.3.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.1.7",
+    "express": "^4.19.2",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.416.0",
+    "mongoose": "^8.5.1",
+    "next": "14.2.5",
+    "next-auth": "^4.24.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-spinners": "^0.14.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "streamifier": "^0.1.1",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/socket.io": "^3.0.2",
+    "@types/streamifier": "^0.1.2",
+    "concurrently": "^8.2.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
