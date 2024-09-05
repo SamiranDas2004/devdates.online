@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         }
       );
     }
-
+findUser.likeby=findUser.likeby.filter((likeby)=>!likeby.equals(id))
     // Save the changes
     await findUser.save();
     await findID.save();
