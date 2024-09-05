@@ -39,8 +39,7 @@ export async function POST(req: NextRequest) {
     const objectIdToRemove = new ObjectId(id);
 
     // Exclude the specified ObjectId from the likeby array
-    findUser.likeby = findUser.likeby.filter((likeId: ObjectId) => !likeId.equals(objectIdToRemove));
-
+  
     // Save the updated user document
     await findUser.save();
 
