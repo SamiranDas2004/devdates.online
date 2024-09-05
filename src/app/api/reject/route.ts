@@ -38,10 +38,11 @@ export async function POST(req: NextRequest) {
     // Convert the string id to ObjectId
     const objectIdToRemove = new ObjectId(id);
 
-    // Exclude the specified ObjectId from the likeby array
-  
-    // Save the updated user document
-    await findUser.save();
+    // Exclude the specified ObjectId from the likeby array using $pull
+    await UserModel.updateOne(
+      { email: email },
+      { $pull: { likeby: objectIdToRemove } } // This will remove the ObjectId from the likeby array
+    );
 
     return NextResponse.json(
       {

@@ -50,7 +50,7 @@ const ChatContent: React.FC = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/recivesavedmassages",
+          "/api/recivesavedmassages",
           {
             fromUser: userEmail,
             toUser: targetUserEmail,
@@ -130,7 +130,7 @@ const ChatContent: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3000/savemessages",
+          "/savemessages",
           newMessage
         );
         console.log(response.data);
@@ -147,7 +147,7 @@ const ChatContent: React.FC = () => {
       const Showpeople = async () => {
         try {
           const res = await axios.post(
-            "http://localhost:3000/getthefuckingmatches",
+            "/getthefuckingmatches",
             { email: session.user.email }
           );
           setUserInfo(res.data.data);

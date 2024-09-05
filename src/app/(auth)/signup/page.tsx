@@ -14,7 +14,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle the signup logic here (e.g., send data to the backend)
-    const response=await axios.post("http://localhost:3000/api/signup",{username:username,email:email,password:password})
+    const response=await axios.post("/api/signup",{username:username,email:email,password:password})
 
     console.log(response.data);
     

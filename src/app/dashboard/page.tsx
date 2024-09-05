@@ -23,13 +23,13 @@ function CarouselDemo() {
   
     try {
       // Fetch data from the API and store it in a variable
-      const response = await axios.post('http://localhost:3000/api/findgenders', { gender: value });
+      const response = await axios.post('/api/findgenders', { gender: value });
       console.log('Response data from findgenders:', response.data);
   
  console.log(response.data,session?.user.email);
  
   
-      const result = await axios.post('http://localhost:3000/api/notinclude', {
+      const result = await axios.post('/api/notinclude', {
         email: session?.user.email,
         data: response.data.data // Ensure this is an array
       });
@@ -79,13 +79,13 @@ function CarouselDemo() {
       const emailId = session?.user.email;
       console.log(emailId);
 
-      const response = await axios.post('http://localhost:3000/api/getUserId', {
+      const response = await axios.post('/api/getUserId', {
         email: emailId,
       });
       const userId = response.data.id;
       console.log(userId);
 
-      const likeResponse = await axios.post('http://localhost:3000/api/likeby', {
+      const likeResponse = await axios.post('/api/likeby', {
         userId: userId,
         email: email,
       });
@@ -105,7 +105,7 @@ function CarouselDemo() {
     console.log(id, email);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/dislike', {
+      const response = await axios.post('/api/dislike', {
         email,
         userId: id,
       });
@@ -156,6 +156,8 @@ function CarouselDemo() {
                             src={users[currentIndex].photos[photoIndex]}
                             alt={`${users[currentIndex].username}'s photo`}
                             className="w-full h-full object-cover"
+                            width={500}
+                            height={500}
                           />
                         </div>
                         <div className="text-center mt-4">

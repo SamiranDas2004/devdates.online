@@ -19,7 +19,7 @@ export default function Likedperson() {
         try {
           setLoading(true);
           const response = await axios.post(
-            'http://localhost:3000/api/getMatches',
+            '/api/getMatches',
             { email: session.user.email }
           );
           
@@ -38,7 +38,7 @@ export default function Likedperson() {
   const reject = async (id: any) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/reject",
+        "/api/reject",
         { email: session?.user.email, id: id }
       );
       console.log(response.data);
@@ -49,13 +49,22 @@ export default function Likedperson() {
     }
   };
 
+  
+
+
+
+
+
   const bothMatched = async (id: any) => {
     try {
+      setUserInfo((prevUserInfo) => prevUserInfo.filter((user) => user._id !== id));
       const response = await axios.post(
-        "http://localhost:3000/api/bothmatches",
+        "/api/bothmatches",
         { email: session?.user.email, id: id }
       );
-      const response2 = await axios.post("http://localhost:3000/api/showmatchesofmyside",{email:session?.user.email,id:id})
+
+
+      const response2 = await axios.post("/api/showmatchesofmyside",{email:session?.user.email,id:id})
       console.log(response2.data);
       
       console.log(response.data);

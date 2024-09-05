@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
             const hashedPassword = await bcrypt.hash(randomPassword, saltRounds);
 
             // Call your signup API to create a new user
-            await axios.post("http://localhost:3000/api/signup", {
+            await axios.post("/api/signup", {
               username: user.name || profile?.name || "Unknown",
               email: user.email,
               avatar: user.image || profile?.image || "",
