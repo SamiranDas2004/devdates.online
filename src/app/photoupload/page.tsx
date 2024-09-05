@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; // Import Image component from Next.js
+import Image from 'next/image';
 
 const PhotoUpload = () => {
   const { data: session } = useSession();
@@ -35,6 +35,7 @@ const PhotoUpload = () => {
         },
       });
       console.log(response.data);
+      // Redirect or perform some action on success
     } catch (err: any) {
       console.error(err);
       setError('Error uploading files');
@@ -48,48 +49,41 @@ const PhotoUpload = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white relative">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/path-to-your-background-image.jpg)' }}
-      ></div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-900 relative">
+      {/* Background */}
+      <div className="absolute inset-0 bg-cover bg-center" ></div>
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg p-6 bg-gray-800 bg-opacity-80 rounded-lg shadow-lg">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md p-6 bg-white bg-opacity-90 rounded-lg shadow-lg shadow-gray-800/100">
+
         {/* User Info */}
-        <div className="flex flex-col items-center mb-4">
+        <div className="flex flex-col items-center mb-6">
+       
           <p className="text-xl font-semibold mb-2">Signed in as {session.user.name}</p>
-          <div className="relative w-24 h-24 mb-4">
-            <Image
-              src={session.user.image || '/default-avatar.png'} // Provide a default image
-              alt="User Avatar"
-              layout="fill" // Use layout="fill" to fill the container
-              objectFit="cover" // Ensure the image covers the container
-              className="rounded-full"
-            />
-          </div>
-          <button
-            onClick={() => signOut()}
-            className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
-          >
-            Sign out
-          </button>
         </div>
 
         {/* File Upload Form */}
         <form onSubmit={handleUpload} className="w-full flex flex-col items-center space-y-4">
-          <input
-            type="file"
-            name="photos"
-            multiple
-            onChange={handleFileChange}
-            className="bg-gray-700 text-white py-2 px-4 rounded-lg border border-gray-600"
-          />
+          <div className="w-full flex flex-col items-center border-dashed border-2 border-gray-300 p-4 rounded-lg">
+            <input
+              type="file"
+              name="photos"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+              id="file-upload"
+            />
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer text-gray-600 hover:text-gray-900 transition"
+            >
+              <p className="text-lg"> Click to Select Photos</p>
+            </label>
+          </div>
           <button
             type="submit"
             disabled={uploading}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
           >
             {uploading ? 'Uploading...' : 'Upload'}
           </button>
