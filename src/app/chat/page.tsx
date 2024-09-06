@@ -189,6 +189,9 @@ const ChatContent: React.FC = () => {
             ))}
             <div ref={messagesEndRef} />
           </div>
+
+
+          
         </div>
         <div className="flex gap-2 mt-2 p-4">
           <input
