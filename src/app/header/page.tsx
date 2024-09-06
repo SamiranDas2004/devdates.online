@@ -16,10 +16,10 @@ import love from '../../../public/image.png'
 
     const signin = () => {
         if (!session) {
-            router.replace('/signin');
+            router.replace('https://sparkling-dodol-71fc9f.netlify.app/signin');
         } else {
             signOut();
-            router.replace('/signin');
+            router.replace('https://sparkling-dodol-71fc9f.netlify.app/signin');
         }
     }
 
