@@ -99,7 +99,7 @@ export default function Likedperson() {
                     No photo available
                   </div>
                 )}
-                <p>{user.username}</p>
+                <p className=' justify-center flex items-center font-serif font-bold'>{user.username}</p>
                 <div className='flex justify-center items-center'>
                   <button
                     onClick={() => bothMatched(user._id)}

@@ -5,8 +5,8 @@ import React, { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image';
 import img from '../../../public/image.png'
-import love from '../../../public/image.png'
- function Header() {
+
+function Header() {
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -21,10 +21,12 @@ import love from '../../../public/image.png'
             signOut();
             router.replace('https://sparkling-dodol-71fc9f.netlify.app/signin');
         }
+        setIsMenuOpen(false); // Close menu after sign out or sign in
     }
 
     const signup = () => {
         router.replace('/signup');
+        setIsMenuOpen(false); // Close menu after signup
     }
 
     const toggleMenu = () => {
@@ -39,12 +41,11 @@ import love from '../../../public/image.png'
                         <Link href="/" className="block text-teal-600">
                             <Image
                               className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
-                            src={img}
-                            alt='DevDate'
-                             width={80}
-                             height={80}
+                              src={img}
+                              alt='DevDate'
+                              width={80}
+                              height={80}
                             />
-                          
                         </Link>
                     </div>
 
@@ -53,7 +54,7 @@ import love from '../../../public/image.png'
                             <ul className="flex items-center gap-8 text-base font-medium text-gray-700">
                                 <li>
                                     <Link href="/dashboard" className="hover:text-blue-600 transition-colors duration-300">
-                                     Dashboard
+                                        Dashboard
                                     </Link>
                                 </li>
                                 <li className="hover:text-blue-600 transition-colors duration-300">
@@ -67,8 +68,8 @@ import love from '../../../public/image.png'
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/photoupload" className="hover:text-blue-600 transition-colors duration-300"> 
-                                     Photoupload
+                                    <Link href="/photoupload" className="hover:text-blue-600 transition-colors duration-300">
+                                        Photoupload
                                     </Link>
                                 </li>
                             </ul>
@@ -84,14 +85,12 @@ import love from '../../../public/image.png'
                                 {state}
                             </button>
 
-                            <div className=" sm:flex">
-                                <button
-                                    className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-                                    onClick={signup}
-                                >
-                                    Signup
-                                </button>
-                            </div>
+                            <button
+                                className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+                                onClick={signup}
+                            >
+                                Signup
+                            </button>
                         </div>
 
                         <div className="block md:hidden">
@@ -121,22 +120,22 @@ import love from '../../../public/image.png'
                     <nav aria-label="Global">
                         <ul className="flex flex-col items-center gap-4 mt-4 text-base font-medium text-gray-700">
                             <li>
-                                <Link href="/dashboard" className="hover:text-blue-600 transition-colors duration-300">
+                                <Link href="/dashboard" className="hover:text-blue-600 transition-colors duration-300" onClick={toggleMenu}>
                                     Dashboard
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/matches" className="hover:text-blue-600 transition-colors duration-300">
+                                <Link href="/matches" className="hover:text-blue-600 transition-colors duration-300" onClick={toggleMenu}>
                                     Matches
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/chat" className="hover:text-blue-600 transition-colors duration-300">
+                                <Link href="/chat" className="hover:text-blue-600 transition-colors duration-300" onClick={toggleMenu}>
                                     Chat
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/photoupload" className="hover:text-blue-600 transition-colors duration-300">
+                                <Link href="/photoupload" className="hover:text-blue-600 transition-colors duration-300" onClick={toggleMenu}>
                                     Photoupload
                                 </Link>
                             </li>

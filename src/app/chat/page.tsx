@@ -144,7 +144,7 @@ const ChatContent: React.FC = () => {
   }, [session, status]);
 
   return (
-    <div className="grid grid-cols-3  h-[91vh] bg-white">
+    <div className="grid grid-cols-4  h-[91vh] bg-white">
       <div className="overflow-y-auto bg-white w-2/3 h-screen p-4">
         {userInfo.map((user) => (
           <div key={user.email}>
@@ -166,7 +166,7 @@ const ChatContent: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="col-span-2 flex flex-col">
+      <div className="col-span-2-4 flex flex-col"> // make this div take the colum 2-4
         <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
           <div className="overflow-y-auto flex-1">
             {messages.map((msg) => (
