@@ -21,16 +21,16 @@ export default function SignupPage() {
     console.log({ username, email, password });
   };
 
-  const handleGitHubLogin = async () => {
-    try {
-      const result = await signIn('github', { callbackUrl: '/dashboard' });
-      if (result?.url) {
-        router.push(result.url); // Navigate to the dashboard
-      }
-    } catch (error) {
-      console.error('GitHub login failed:', error);
-    }
-  };
+  // const handleGitHubLogin = async () => {
+  //   try {
+  //     const result = await signIn('github', { callbackUrl: '/dashboard' });
+  //     if (result?.url) {
+  //       router.push(result.url); // Navigate to the dashboard
+  //     }
+  //   } catch (error) {
+  //     console.error('GitHub login failed:', error);
+  //   }
+  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -83,7 +83,7 @@ export default function SignupPage() {
             Sign Up
           </button>
         </form>
-        <div className="mt-6 text-center">
+        {/* <div className="mt-6 text-center">
           <p className="text-gray-600">Or sign up with</p>
           <button
             onClick={handleGitHubLogin}
@@ -91,7 +91,7 @@ export default function SignupPage() {
           >
             GitHub
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
