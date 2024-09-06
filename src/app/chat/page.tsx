@@ -67,8 +67,8 @@ const ChatContent: React.FC = () => {
 
         const { receivedMessages, sentMessages } = response.data;
 
-        const processMessages = (msgs: any[]): Message[] => 
-          msgs.flatMap((msg: any) => 
+        const processMessages = (msgs: any[]): Message[] =>
+          msgs.flatMap((msg: any) =>
             Array.isArray(msg.message)
               ? msg.message.map((individualMessage: string, index: number) => ({
                   fromUser: msg.fromUser,
@@ -76,12 +76,14 @@ const ChatContent: React.FC = () => {
                   timestamp: msg.timestamp,
                   id: `${msg.fromUser}-${msg.timestamp}-${index}`,
                 }))
-              : [{
-                  fromUser: msg.fromUser,
-                  message: msg.message,
-                  timestamp: msg.timestamp,
-                  id: `${msg.fromUser}-${msg.timestamp}`,
-                }]
+              : [
+                  {
+                    fromUser: msg.fromUser,
+                    message: msg.message,
+                    timestamp: msg.timestamp,
+                    id: `${msg.fromUser}-${msg.timestamp}`,
+                  },
+                ]
           );
 
         const allMessages = [
@@ -113,7 +115,9 @@ const ChatContent: React.FC = () => {
         id: `${userEmail}-${Date.now()}`,
       };
 
-      setMessages((prevMessages) => sortMessagesByTimestamp([...prevMessages, newMessage]));
+      setMessages((prevMessages) =>
+        sortMessagesByTimestamp([...prevMessages, newMessage])
+      );
       socket.emit("sendMessage", newMessage);
 
       try {
@@ -130,10 +134,9 @@ const ChatContent: React.FC = () => {
     if (status === "authenticated" && session?.user?.email) {
       const Showpeople = async () => {
         try {
-          const res = await axios.post(
-            "/api/getthefuckingmatches",
-            { email: session.user.email }
-          );
+          const res = await axios.post("/api/getthefuckingmatches", {
+            email: session.user.email,
+          });
           setUserInfo(res.data.data);
         } catch (error) {
           console.log(error);
@@ -166,50 +169,48 @@ const ChatContent: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="col-span-2-4 flex flex-col"> // make this div take the colum 2-4
-        <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
-          <div className="overflow-y-auto flex-1">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`mb-3 flex ${
-                  msg.fromUser === userEmail ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`inline-block px-4 py-2 rounded-lg ${
-                    msg.fromUser === userEmail
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
-                  } shadow-md`}
-                >
-                  {msg.message}
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-
-          
-        </div>
-        <div className="flex gap-2 mt-2 p-4">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-            className="flex-1 p-3 border border-gray-300 rounded-lg bg-white text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Type a message..."
-          />
-          <button
-            onClick={sendMessage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-150 ease-in-out"
+      <div className="col-span-2-4 flex flex-col"> {/* Correct comment placement */}
+  <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
+    <div className="overflow-y-auto flex-1">
+      {messages.map((msg) => (
+        <div
+          key={msg.id}
+          className={`mb-3 flex ${
+            msg.fromUser === userEmail ? "justify-end" : "justify-start"
+          }`}
+        >
+          <div
+            className={`inline-block px-4 py-2 rounded-lg ${
+              msg.fromUser === userEmail
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-black"
+            } shadow-md`}
           >
-            Send
-          </button>
+            {msg.message}
+          </div>
         </div>
-      </div>
+      ))}
+      <div ref={messagesEndRef} />
+    </div>
+  </div>
+  <div className="flex gap-2 mt-2 p-4">
+    <input
+      type="text"
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+      className="flex-1 p-3 border border-gray-300 rounded-lg bg-white text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Type a message..."
+    />
+    <button
+      onClick={sendMessage}
+      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-150 ease-in-out"
+    >
+      Send
+    </button>
+  </div>
+</div>
+
     </div>
   );
 };
@@ -223,4 +224,3 @@ const Chat: React.FC = () => {
 };
 
 export default Chat;
-
