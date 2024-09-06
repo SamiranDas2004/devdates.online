@@ -1,11 +1,22 @@
 'use client';
 
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import Image from 'next/image';
+import one from '../../public/one.jpg';
+import two from '../../public/two.jpg';  // Fixed the image name here
+import three from '../../public/three.jpg';  // Fixed the image name here
+
 export default function Home() {
+  const images = [
+    { image: one },
+    { image: two },
+    { image: three },
+  ];
+
   return (
     <>
       <main className="flex items-center justify-center p-0 m-0">
         <div className="relative w-full h-[91vh] flex flex-col lg:flex-row">
-          {/* Background Image for Large Screens */}
           
           {/* Left Side - Content */}
           <div className="relative flex flex-col h-[91vh] justify-center items-center lg:items-start w-full lg:w-1/2 p-6 lg:p-12 bg-white/0 sm:bg-transparent z-10">
@@ -23,7 +34,7 @@ export default function Home() {
 
               <div className="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                 <a
-                  href="#"
+                  href="/dashboard"
                   className="block w-full sm:w-auto rounded bg-[#eb65c2] px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500"
                 >
                   Get Started
@@ -39,13 +50,34 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Right Side - Carousel */}
+          <div className="relative flex justify-center items-center w-full lg:w-1/2 bg-white">
+            <Carousel className="w-full h-full">
+              <CarouselContent>
+                {images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <Image
+                      src={img.image}
+                      alt={`Slide ${index + 1}`}
+                      className="w-full h-[]object-cover"
+                      width={500}
+                      height={500}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10" />
+              <CarouselNext className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10" />
+            </Carousel>
+          </div>
+
           {/* Background Image for Small Screens */}
-          <div
+          {/* <div
             className="absolute inset-0 lg:hidden bg-[url(https://res.cloudinary.com/dfjfjovut/image/upload/v1724144036/chttkagiyggqh97ws9c6.png)] bg-cover bg-center bg-no-repeat"
           ></div>
           <div
             className="hidden lg:block lg:w-1/2 h-full bg-[url(https://res.cloudinary.com/dfjfjovut/image/upload/v1724144036/chttkagiyggqh97ws9c6.png)] bg-cover bg-center bg-no-repeat"
-          ></div>
+          ></div> */}
         </div>
       </main>
       <div>

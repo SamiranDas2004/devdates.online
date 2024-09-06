@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; // Import the Image component
 
 export default function SignInComponent() {
   const { data: session, status } = useSession();
@@ -13,9 +12,12 @@ export default function SignInComponent() {
     password: ''
   });
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleCredentialsSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
+
     const signInResponse = await signIn('credentials', {
       email: data.email,
       password: data.password,
@@ -27,6 +29,7 @@ export default function SignInComponent() {
     } else if (signInResponse?.ok) {
       router.replace('/dashboard');
     }
+    setLoading(false); // Set loading to false when response is received
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -75,25 +78,16 @@ export default function SignInComponent() {
         <button
           type="submit"
           id="submitButton"
-          className="w-full h-12 px-6 mt-4 text-lg font-semibold text-white bg-blue-600 rounded-lg transition-colors duration-150 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className={`w-full h-12 px-6 mt-4 text-lg font-semibold text-white bg-blue-600 rounded-lg transition-colors duration-150 ${
+            loading ? 'cursor-not-allowed opacity-50 bg-white' : 'hover:bg-blue-700'
+          } focus:outline-none focus:ring-2 focus:ring-blue-400`}
+          disabled={loading} // Disable button during loading
         >
-          Log in
+          {loading ? <div className="flex justify-center items-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-black"></div>
+          </div>: 'Log in'}
         </button>
       </form>
-      <hr className="w-full max-w-md my-6" />
-      <button
-        onClick={() => signIn('github')}
-        className="w-full max-w-md h-12 px-3 flex items-center justify-center text-lg font-semibold text-black bg-white rounded-lg border border-gray-300 transition-colors duration-150 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-600"
-      >
-        <Image
-          src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
-          alt="GitHub Logo"
-          width={24} // Replace with your preferred width
-          height={24} // Replace with your preferred height
-          className="mr-2"
-        />
-        Sign in with GitHub
-      </button>
     </div>
   );
 }

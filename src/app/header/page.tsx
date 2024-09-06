@@ -3,8 +3,10 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import React, { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
-
-function Header() {
+import Image from 'next/image';
+import img from '../../../public/image.png'
+import love from '../../../public/image.png'
+ function Header() {
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -35,12 +37,14 @@ function Header() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="md:flex md:items-center md:gap-12">
                         <Link href="/" className="block text-teal-600">
-                            <svg className="h-8" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 0C6.268 0 0 6.268 0 14s6.268 14 14 14 14-6.268 14-14S21.732 0 14 0zm0 25C7.373 25 2 19.627 2 14S7.373 3 14 3s12 5.373 12 12-5.373 12-12 12z"
-                                    fill="currentColor"
-                                />
-                            </svg>
+                            <Image
+                              className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
+                            src={img}
+                            alt='DevDate'
+                             width={80}
+                             height={80}
+                            />
+                          
                         </Link>
                     </div>
 
@@ -80,7 +84,7 @@ function Header() {
                                 {state}
                             </button>
 
-                            <div className="hidden sm:flex">
+                            <div className=" sm:flex">
                                 <button
                                     className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
                                     onClick={signup}

@@ -10,7 +10,8 @@ import Image from "next/image";
 interface Message {
   fromUser: string;
   message: string;
-  timestamp: Date;
+  timestamp: string;
+  id: string; // Add a unique identifier for each message
 }
 
 const ChatContent: React.FC = () => {
@@ -29,15 +30,23 @@ const ChatContent: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const sortMessagesByTimestamp = (messages: Message[]): Message[] => {
+    return [...messages].sort((a, b) => {
+      const dateA = new Date(a.timestamp).getTime();
+      const dateB = new Date(b.timestamp).getTime();
+      return dateA - dateB;
+    });
+  };
+
   useEffect(() => {
     if (userEmail) {
       socket.emit("joinRoom", userEmail);
 
-      socket.on("receiveMessage", ({ fromUser, message }: Message) => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { fromUser, message, timestamp: new Date() },
-        ]);
+      socket.on("receiveMessage", (newMessage: Message) => {
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, newMessage];
+          return sortMessagesByTimestamp(updatedMessages);
+        });
       });
 
       return () => {
@@ -48,60 +57,39 @@ const ChatContent: React.FC = () => {
 
   useEffect(() => {
     const fetchMessages = async () => {
+      if (!userEmail || !targetUserEmail) return;
+
       try {
-        const response = await axios.post(
-          "/api/recivesavedmassages",
-          {
-            fromUser: userEmail,
-            toUser: targetUserEmail,
-          }
-        );
+        const response = await axios.post("/api/recivesavedmassages", {
+          fromUser: userEmail,
+          toUser: targetUserEmail,
+        });
 
         const { receivedMessages, sentMessages } = response.data;
 
-        const allMessages: Message[] = [];
+        const processMessages = (msgs: any[]): Message[] => 
+          msgs.flatMap((msg: any) => 
+            Array.isArray(msg.message)
+              ? msg.message.map((individualMessage: string, index: number) => ({
+                  fromUser: msg.fromUser,
+                  message: individualMessage,
+                  timestamp: msg.timestamp,
+                  id: `${msg.fromUser}-${msg.timestamp}-${index}`,
+                }))
+              : [{
+                  fromUser: msg.fromUser,
+                  message: msg.message,
+                  timestamp: msg.timestamp,
+                  id: `${msg.fromUser}-${msg.timestamp}`,
+                }]
+          );
 
-        receivedMessages.forEach((msg: any) => {
-          if (Array.isArray(msg.message)) {
-            msg.message.forEach((individualMessage: string) => {
-              allMessages.push({
-                fromUser: msg.fromUser,
-                message: individualMessage,
-                timestamp: new Date(msg.timestamp),
-              });
-            });
-          } else {
-            allMessages.push({
-              fromUser: msg.fromUser,
-              message: msg.message,
-              timestamp: new Date(msg.timestamp),
-            });
-          }
-        });
+        const allMessages = [
+          ...processMessages(receivedMessages),
+          ...processMessages(sentMessages),
+        ];
 
-        sentMessages.forEach((msg: any) => {
-          if (Array.isArray(msg.message)) {
-            msg.message.forEach((individualMessage: string) => {
-              allMessages.push({
-                fromUser: msg.fromUser,
-                message: individualMessage,
-                timestamp: new Date(msg.timestamp),
-              });
-            });
-          } else {
-            allMessages.push({
-              fromUser: msg.fromUser,
-              message: msg.message,
-              timestamp: new Date(msg.timestamp),
-            });
-          }
-        });
-
-        allMessages.sort(
-          (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
-        );
-
-        setMessages(allMessages);
+        setMessages(sortMessagesByTimestamp(allMessages));
       } catch (error: any) {
         console.log("Error fetching or sorting messages:", error);
       }
@@ -118,22 +106,18 @@ const ChatContent: React.FC = () => {
 
   const sendMessage = async () => {
     if (message.trim() !== "" && userEmail && targetUserEmail) {
-      const newMessage = {
+      const newMessage: Message = {
         fromUser: userEmail,
-        toUser: targetUserEmail,
-        message: message,
-        timestamp: new Date(),
+        message: message.trim(),
+        timestamp: new Date().toISOString(),
+        id: `${userEmail}-${Date.now()}`,
       };
 
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => sortMessagesByTimestamp([...prevMessages, newMessage]));
       socket.emit("sendMessage", newMessage);
 
       try {
-        const response = await axios.post(
-          "/api/savemessages",
-          newMessage
-        );
-        console.log(response.data);
+        await axios.post("/api/savemessages", newMessage);
       } catch (error) {
         console.error("Error sending message to server:", error);
       }
@@ -151,7 +135,6 @@ const ChatContent: React.FC = () => {
             { email: session.user.email }
           );
           setUserInfo(res.data.data);
-          console.log("data", res.data.username);
         } catch (error) {
           console.log(error);
         }
@@ -161,8 +144,8 @@ const ChatContent: React.FC = () => {
   }, [session, status]);
 
   return (
-    <div className="grid grid-cols-3 h-screen bg-white">
-      <div className="col-span-1 bg-white p-4 w-[80vw]">
+    <div className="grid grid-cols-3  h-[91vh] bg-white">
+      <div className="overflow-y-auto bg-white w-2/3 h-screen p-4">
         {userInfo.map((user) => (
           <div key={user.email}>
             {user.photos && user.photos.length > 0 ? (
@@ -186,9 +169,9 @@ const ChatContent: React.FC = () => {
       <div className="col-span-2 flex flex-col">
         <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
           <div className="overflow-y-auto flex-1">
-            {messages.map((msg, index) => (
+            {messages.map((msg) => (
               <div
-                key={index}
+                key={msg.id}
                 className={`mb-3 flex ${
                   msg.fromUser === userEmail ? "justify-end" : "justify-start"
                 }`}

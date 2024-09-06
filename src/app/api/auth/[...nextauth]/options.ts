@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GitHubProvider from "next-auth/providers/github";
 import UserModel from "@/models/user";
 import bcrypt from 'bcrypt';
 import { NextAuthOptions } from "next-auth";
@@ -39,10 +38,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error(error);
         }
       }
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string
     })
   ],
   pages: {
@@ -50,31 +45,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account && account.provider === 'github') {
-        await dbConnect();
-
-        try {
-          const existingUser = await UserModel.findOne({ email: user.email });
-
-          if (!existingUser) {
-            const randomPassword = Math.random().toString(36).slice(-8);
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(randomPassword, saltRounds);
-
-            // Call your signup API to create a new user
-            await axios.post("/api/signup", {
-              username: user.name || profile?.name || "Unknown",
-              email: user.email,
-              avatar: user.image || profile?.image || "",
-              password: hashedPassword
-            });
-          }
-          return true;
-        } catch (error: any) {
-          console.error('Error creating user:', error);
-          return false;
-        }
-      }
+      // No GitHub provider logic here
       return true;
     },
     async jwt({ token, user }) {
@@ -99,4 +70,4 @@ export const authOptions: NextAuthOptions = {
     maxAge: 12 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET
-};
+}
