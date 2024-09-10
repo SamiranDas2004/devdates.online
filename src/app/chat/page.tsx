@@ -147,72 +147,76 @@ const ChatContent: React.FC = () => {
   }, [session, status]);
 
   return (
-    <div className="grid grid-cols-4  h-[91vh] bg-white">
-      <div className="overflow-y-auto bg-white w-2/3 h-screen p-4">
-        {userInfo.map((user) => (
-          <div key={user.email}>
-            {user.photos && user.photos.length > 0 ? (
-              <>
-                <Image
-                  onClick={() => handleNavigate(user.email)}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
-                  src={user.photos[0]}
-                  alt={user.username}
-                  width={80}
-                  height={80}
-                />
-                <div>{user.username}</div>
-              </>
-            ) : (
-              <div>&quot;&quot;</div>
-            )}
+<div className="grid grid-cols-4 h-[91vh] bg-white">
+  {/* Sidebar with users */}
+  <div className="overflow-y-auto bg-white w-2/3 h-screen p-4">
+    {userInfo.map((user) => (
+      <div key={user.email}>
+        {user.photos && user.photos.length > 0 ? (
+          <>
+            <Image
+              onClick={() => handleNavigate(user.email)}
+              className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
+              src={user.photos[0]}
+              alt={user.username}
+              width={80}
+              height={80}
+            />
+            <div>{user.username}</div>
+          </>
+        ) : (
+          <div>&quot;&quot;</div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* Chat section taking up the remaining 3 columns */}
+  <div className="col-span-3 flex flex-col">
+    <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
+      <div className="overflow-y-auto flex-1">
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`mb-3 flex ${
+              msg.fromUser === userEmail ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`inline-block px-4 py-2 rounded-lg ${
+                msg.fromUser === userEmail
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-black"
+              } shadow-md`}
+            >
+              {msg.message}
+            </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
-      <div className="col-span-2-4 flex flex-col"> {/* Correct comment placement */}
-  <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-md flex flex-col">
-    <div className="overflow-y-auto flex-1">
-      {messages.map((msg) => (
-        <div
-          key={msg.id}
-          className={`mb-3 flex ${
-            msg.fromUser === userEmail ? "justify-end" : "justify-start"
-          }`}
-        >
-          <div
-            className={`inline-block px-4 py-2 rounded-lg ${
-              msg.fromUser === userEmail
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-black"
-            } shadow-md`}
-          >
-            {msg.message}
-          </div>
-        </div>
-      ))}
-      <div ref={messagesEndRef} />
     </div>
-  </div>
-  <div className="flex gap-2 mt-2 p-4">
-    <input
-      type="text"
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-      className="flex-1 p-3 border border-gray-300 rounded-lg bg-white text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      placeholder="Type a message..."
-    />
-    <button
-      onClick={sendMessage}
-      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-150 ease-in-out"
-    >
-      Send
-    </button>
+
+    {/* Input field for sending messages */}
+    <div className="flex gap-2 mt-2 p-4">
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+        className="flex-1 p-3 border border-gray-300 rounded-lg bg-white text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Type a message..."
+      />
+      <button
+        onClick={sendMessage}
+        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-150 ease-in-out"
+      >
+        Send
+      </button>
+    </div>
   </div>
 </div>
-
-    </div>
-  );
+  )
 };
 
 const Chat: React.FC = () => {
