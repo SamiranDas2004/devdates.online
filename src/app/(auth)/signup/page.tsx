@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -9,28 +8,28 @@ export default function SignupPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter(); // Initialize the router
+  const [gender, setGender] = useState(''); // Add gender state
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle the signup logic here (e.g., send data to the backend)
-    const response=await axios.post("/api/signup",{username:username,email:email,password:password})
+    try {
+      const response = await axios.post("/api/signup", {
+        username,
+        email,
+        password,
+        gender, // Include gender in the request
+      });
 
-    console.log(response.data);
-    
-    console.log({ username, email, password });
+      console.log(response.data);
+      if (response.data.success) {
+        // Redirect to login or dashboard after successful signup
+        router.push('/signin');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+    }
   };
-
-  // const handleGitHubLogin = async () => {
-  //   try {
-  //     const result = await signIn('github', { callbackUrl: '/dashboard' });
-  //     if (result?.url) {
-  //       router.push(result.url); // Navigate to the dashboard
-  //     }
-  //   } catch (error) {
-  //     console.error('GitHub login failed:', error);
-  //   }
-  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -38,9 +37,7 @@ export default function SignupPage() {
         <h2 className="text-2xl font-semibold mb-6 text-center">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-gray-700">
-              Username
-            </label>
+            <label htmlFor="username" className="block text-gray-700">Username</label>
             <input
               type="text"
               id="username"
@@ -51,9 +48,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-gray-700">
-              Email
-            </label>
+            <label htmlFor="email" className="block text-gray-700">Email</label>
             <input
               type="email"
               id="email"
@@ -64,9 +59,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700">
-              Password
-            </label>
+            <label htmlFor="password" className="block text-gray-700">Password</label>
             <input
               type="password"
               id="password"
@@ -76,6 +69,31 @@ export default function SignupPage() {
               required
             />
           </div>
+          {/* Gender Radio Buttons */}
+          <div>
+            <label className="block text-gray-700">Gender</label>
+            <div className="space-x-4">
+              <label>
+                <input
+                  type="radio"
+                  value="male"
+                  checked={gender === 'male'}
+                  onChange={(e) => setGender(e.target.value)}
+                />
+                Male
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="female"
+                  checked={gender === 'female'}
+                  onChange={(e) => setGender(e.target.value)}
+                />
+                Female
+              </label>
+          
+            </div>
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -83,15 +101,6 @@ export default function SignupPage() {
             Sign Up
           </button>
         </form>
-        {/* <div className="mt-6 text-center">
-          <p className="text-gray-600">Or sign up with</p>
-          <button
-            onClick={handleGitHubLogin}
-            className="mt-4 w-full bg-gray-800 text-white font-semibold py-2 rounded-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800"
-          >
-            GitHub
-          </button>
-        </div> */}
       </div>
     </div>
   );

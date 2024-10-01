@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
@@ -26,6 +27,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-spinners": "^0.14.1",
+    "react-toastify": "^10.0.5",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "streamifier": "^0.1.1",

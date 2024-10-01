@@ -1,4 +1,3 @@
-// pages/api/signup.ts
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/user";
 import bcrypt from 'bcrypt';
@@ -7,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   await dbConnect();
   try {
-    const { username, email,password } = await request.json();
+    const { username, email, password, gender } = await request.json();
 
     const existingUser = await UserModel.findOne({ email });
 
@@ -17,14 +16,16 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const salt=10
-const hashedPassword= await bcrypt.hash(password,salt)
-    // Create a new user
+
+    const salt = 10;
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user with gender field
     const newUser = await UserModel.create({
-        username,
+      username,
       email,
-   password:hashedPassword
-      // Password is not required here as it might be handled separately
+      password: hashedPassword,
+      gender, // Ensure gender is stored
     });
 
     return NextResponse.json({
@@ -33,8 +34,7 @@ const hashedPassword= await bcrypt.hash(password,salt)
       user: newUser,
     });
   } catch (error: any) {
-    console.log(error.message);
-
+    console.error(error.message);
     return NextResponse.json(
       { success: false, message: "An error occurred during registration" },
       { status: 500 }

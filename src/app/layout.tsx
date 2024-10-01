@@ -19,6 +19,7 @@ export default function RootLayout({
       <div className="">
         <Header/>
        </div>{children}</body>
+     
       </AuthProvider>
     </html>
   );
