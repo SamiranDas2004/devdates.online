@@ -14,10 +14,10 @@ function Header() {
 
     const signin = () => {
         if (!session) {
-            router.replace('https://sparkling-dodol-71fc9f.netlify.app/signin');
+            router.replace('/signin');
         } else {
             signOut();
-            router.replace('https://sparkling-dodol-71fc9f.netlify.app/signin');
+            router.replace('/signin');
         }
         setIsMenuOpen(false); // Close menu after sign out or sign in
     }
